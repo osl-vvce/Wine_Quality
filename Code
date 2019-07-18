@@ -1,0 +1,27 @@
+Wine Testing Code (in progress)
+
+import pandas as pd
+import numpy as np
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+winepath='winequality-red.csv'  #file path
+winedata=pd.read_csv(winepath)  #read data 
+y=winedata.quality              #setting the prediction feature
+winefeatures=['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar','pH']    #features to predict y
+x=winedata[winefeatures]
+winemodel=DecisionTreeRegressor(random_state=1)   #using decision tree for prediction
+winemodel.fit(x,y)
+print("Making predictions for the following 5 wines:")
+print(x.head())
+print("The predictions are")
+print(winemodel.predict(x.head()))
+winepred = winemodel.predict(x)                   #predicting for the first 5 values
+mean_absolute_error(y, winepred)                  #calculate the error
+train_x, val_x, train_y, val_y = train_test_split(x, y, random_state = 0)
+winemodel = DecisionTreeRegressor()
+winemodel.fit(train_x, train_y)
+valpred = winemodel.predict(val_x)
+print(mean_absolute_error(val_y, valpred))
